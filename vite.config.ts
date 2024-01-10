@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import removeConsole from "vite-plugin-remove-console";
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa";
 
+
 const manifestForPlugin: Partial<VitePWAOptions> = {
   registerType:'prompt',
   includeAssets:['favicon.ico', "apple-touc-icon.png", "masked-icon.svg"],
@@ -40,7 +41,7 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
   display:"standalone",
   scope:'/',
   start_url:"/",
-  orientation:'portrait'
+  orientation:'portrait',
   }
 }
 
