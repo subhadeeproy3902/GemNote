@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   chakra,
   Container,
   Stack,
@@ -9,6 +10,8 @@ import {
 } from "@chakra-ui/react";
 import { FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa";
 import { ReactNode } from "react";
+import { MdInstallMobile } from "react-icons/md";
+import { useState, useEffect } from "react";
 
 
 const SocialButton = ({
@@ -44,6 +47,26 @@ const SocialButton = ({
 };
 
 function Footer() {
+
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    });
+  }, []);
+
+  const handleInstallPrompt = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+      }
+    }
+  };
+
   return (
     <Box
       bg={useColorModeValue("gray.100", "gray.800")}
@@ -55,16 +78,26 @@ function Footer() {
       <Container
         maxW={"1600px"}
         as={Stack}
-        py={4}
-        px={10}
         direction={{ base: "column", md: "row" }}
         spacing={4}
         justify={{ base: "center", md: "space-between" }}
         align={{ base: "center", md: "center" }}
+        className="px-1 sm:px-10 py-4"
       >
-        <Text fontSize={{ base: 11, sm: "inherit" }}>
-          Made by <a href="https://github.com/subhadeeproy3902" rel="noferrer" target="_blank" style={{ color: useColorModeValue("darkviolet", "violet"), fontWeight: "700" }} >Subhadeep Roy</a>. All rights reserved
-        </Text>
+        <div className="flex justify-between items-center gap-5">
+          <Text fontSize={{ base: 11, sm: "inherit" }}>
+            Made by <a href="https://github.com/subhadeeproy3902" rel="noferrer" target="_blank" style={{ color: useColorModeValue("darkviolet", "violet"), fontWeight: "700" }} >Subhadeep Roy</a>. All rights reserved
+          </Text>
+          <Button
+            size={{ base: "sm", sm: "md" }}
+            leftIcon={<MdInstallMobile />}
+            colorScheme="primary"
+            className="px-2"
+            onClick={handleInstallPrompt}
+          >
+            Install
+          </Button>
+        </div>
         <Stack direction={"row"} spacing={6}>
           <SocialButton label={"Linkedin"} href={"https://www.linkedin.com/in/subhadeep3902/"}>
             <FaLinkedin />
